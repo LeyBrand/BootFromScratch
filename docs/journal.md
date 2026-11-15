@@ -27,3 +27,23 @@ The signature is critical.
 ### Problems
 
 None.
+
+## Stage 2 – Print a char
+
+### What I did
+
+Put the "print a char" command (`0x0E`) in `AH`, put the char `'H'` in `AL`,
+and called the BIOS with `int 0x10`.
+
+### What I learned
+
+The BIOS loaded the code and handed the job to the CPU.
+But it left a way to call it for services it can do, such as printing.
+
+### What surprised me
+
+None.
+
+### Problems
+
+None.
