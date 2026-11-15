@@ -47,3 +47,33 @@ None.
 ### Problems
 
 None.
+
+## Stage 3 – Print a string
+
+### What I did
+
+Set `DS` to 0, and put the address of the string in `SI`.
+Then wrote a loop that loads a char into `AL` and checks if it is 0 (end of the string).
+If it is 0, the loop ends.
+If not, the char is printed with `int 0x10` (`0x0E` in `AH`), and `SI` moves to the next char.
+
+### What I learned
+
+A string is just bytes in memory, and a label is the address of the first byte.
+`[si]` means "the byte at the address in `SI`", not the address itself.
+Data must be outside the code path, or the CPU will run it as instructions.
+
+In 16-bit mode, one register is too small to point to all of memory.
+So the CPU uses two: real address = `DS` × 16 + `SI`.
+The BIOS does not promise the value of `DS`, so I set it to 0 myself.
+A number can't be put into `DS` directly, so I used `AX`: `xor ax, ax` then `mov ds, ax`.
+
+### What surprised me
+
+Without the `0` at the end, the code still works, but only by luck:
+NASM turns `times` into zeros, so the loop finds a `0` right after the string.
+
+### Problems
+
+At first, I put the string before the code, so the CPU would run the letters as commands.
+I also read the char outside the loop, so it would print `H` forever.
