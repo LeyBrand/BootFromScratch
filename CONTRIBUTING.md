@@ -35,4 +35,33 @@ Example: `feat(boot): print single character via int 10h`
 
 ## Building
 
-TBD
+### Prerequisites
+
+```
+sudo apt install nasm qemu-system-x86
+```
+
+### Build
+
+```
+nasm -f bin src/boot.asm -o boot.img
+ls -l boot.img
+```
+
+The file size should be 512 bytes.
+
+### Run
+
+```
+qemu-system-x86_64 -drive format=raw,file=boot.img -display curses
+```
+
+You should see `Booting from Hard Disk...` and then nothing. This means the CPU is running the loop.
+
+### Exit
+
+Open a second terminal and run:
+
+```
+pkill qemu
+```
