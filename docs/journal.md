@@ -77,3 +77,30 @@ NASM turns `times` into zeros, so the loop finds a `0` right after the string.
 
 At first, I put the string before the code, so the CPU would run the letters as commands.
 I also read the char outside the loop, so it would print `H` forever.
+
+## Stage 4 – Keyboard echo
+
+### What I did
+
+Put `0x00` in `AH` (wait for a key) and called the BIOS keyboard service with `int 0x16`.
+Then printed the key with `int 0x10`, in a loop.
+Pressing Esc (`0x1B`) stops the loop.
+Pressing Enter moves to a new line.
+
+### What I learned
+
+`int 0x16` returns two things: the char in `AL`, and the scan code (the physical key number) in `AH`.
+A BIOS call can change registers, so I must set them again before the next call.
+
+### What surprised me
+
+Pressing Enter brought me back to the start of the line, instead of going down a line.
+Enter gives `0x0D` (Carriage Return = go to the start of the line).
+Going down a line needs another byte: `0x0A` (Line Feed).
+I solved it by printing `0x0A` after `0x0D`.
+To do it, I let the code "fall through" into the normal print, so I didn't need a second print block.
+
+### Problems
+
+At first, the print didn't work, because `int 0x16` overwrote `AH` with the scan code.
+I fixed it by putting `0x0E` in `AH` again before `int 0x10`.
