@@ -21,6 +21,12 @@ mov ah, 0x00
 int 0x16
 cmp al, 0x1b
 je end_read_and_print
+cmp al, 0x0d
+jne normal_print
+mov ah, 0x0e
+int 0x10
+mov al, 0x0a
+normal_print:
 mov ah, 0x0e
 int 0x10
 jmp read_and_print
